@@ -5,7 +5,10 @@ from rest_framework.views import status
 from myapp.models import Url
 from myapp.serializers import LinkSerializer
 import uuid
-from django.http import HttpResponseNotFound, Http404
+from django.http import HttpResponseNotFound, Http404, HttpResponse
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework import status
 
 # Create your views here.
 
@@ -13,17 +16,17 @@ def index(request):
     urls = Url.objects.all()
     return render(request, 'index.html', {'urls': urls})
 
-@api_view(['POST'])
-def url_shorten_api_view(request):
+def create(request):
     if request.method == 'POST':
-        link_serializer = LinkSerializer(data=request.data)
-        if link_serializer.is_valid():
-            uid = str(uuid.uuid4())[:5]
-            new_url = Url(link=link_serializer.validated_data['link'], uuid=uid)
-            new_url.save()
-            return Response({'shortened_url': uid}, status= status.HTTP_201_CREATED)
-        return Response(link_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        link = request.POST['link']
+        uid = str(uuid.uuid4())[:5]
+        new_url = Url(link=link,uuid=uid)
+        new_url.save()
+        return HttpResponse(uid)
 
+def go(request, pk):
+    url_details = Url.objects.get(uuid=pk)
+    return redirect(url_details.link)
 
 @api_view(['GET'])
 def get_long_url(request, uuid):
