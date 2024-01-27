@@ -76,10 +76,16 @@ WSGI_APPLICATION = 'djangoProject5.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        #'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'Gf61D-Gg6GcDEcFb32bgc23-CCdca1*B',
+        'HOST': 'roundhouse.proxy.rlwy.net',
+        'PORT': '37548',
     }
 }
 
